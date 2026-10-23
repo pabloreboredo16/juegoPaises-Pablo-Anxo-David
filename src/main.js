@@ -1,5 +1,6 @@
 // Configuración de tu API 
 const API_BASE = 'https://api.restcountries.com/countries/v5'
+const API_KEY = 'rc_live_c1cd20a4ef634d4ca1c09ec62c436f06'
 
 // Elementos del DOM
 const imgBandera = document.getElementById('bandera')
