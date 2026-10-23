@@ -3,19 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Busca Paises</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>Adivina la bandera</title>
+    <link rel="stylesheet" href="src/style.css"> 
 </head>
 <body>
 
-  <h1>Prueba</h1>
+    <!-- SECCIÓN JUEGO -->
+    <section id="juego">
+        <h2>Adivina la Bandera</h2>
+    
+        <!-- Imagen de la bandera -->
+        <img id="bandera" src="" alt="Bandera del país" />
 
+        <!-- Botones con los países -->
+        <div id="opciones"></div>
 
+        <!-- Mensaje (Correcto/Incorrecto) -->
+        <p id="mensaje"></p>
 
+        <!-- Botón para la siguiente bandera -->
+        <button id="siguiente">Siguiente bandera</button>
+    </section>
 
-  
     <!-- scripts js -->
-    <script src="app.js"></script>
+    <script src="src/main.js"></script>
     
 </body>
 </html>
