@@ -1,7 +1,3 @@
-// Configuración de tu API 
-const API_BASE = 'https://api.restcountries.com/countries/v5'
-const API_KEY = 'rc_live_c1cd20a4ef634d4ca1c09ec62c436f06'
-
 // Elementos del DOM
 const imgBandera = document.getElementById('bandera')
 const contenedorOpciones = document.getElementById('opciones')
@@ -24,52 +20,46 @@ function mezclarArray(array) {
 }
 
 async function cargarPaises() {
-    mensaje.textContent = 'Cargando banderas de todo el mundo...'
-
-    const rutas = [
-        `${API_BASE}`,
-        `${API_BASE}?region=europe`,
-        `${API_BASE}?region=americas`,
-        `${API_BASE}?region=asia`,
-        `${API_BASE}?region=africa`
-    ]
-
-    const mapaPaises = new Map()
+    mensaje.textContent = 'Cargando banderas...'
 
     try {
-        for (const url of rutas) {
-            try {
-                const response = await fetch(url, {
-                    headers: { 'Authorization': `Bearer ${API_KEY}` }
-                })
+        const response = await fetch('https://raw.githubusercontent.com/mledoze/countries/master/dist/countries.json')
 
-                if (response.ok) {
-                    const data = await response.json()
-                    const objetos = data.data?.objects || data.data || []
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`)
+        }
 
-                    if (Array.isArray(objetos)) {
-                        objetos.forEach(p => {
-                            if (p.flag?.url_svg && p.names?.common) {
-                                mapaPaises.set(p.names.common, p)
-                            }
-                        })
+        const data = await response.json()
+
+        todosLosPaises = data
+            .filter(p => p.cca2 && (p.translations?.spa?.common || p.name?.common))
+            .map(p => {
+                const code = p.cca2.toLowerCase()
+                const flagUrl = `https://flagcdn.com/w320/${code}.png`
+                
+                // Prioriza el nombre traducido al español
+                const nombreEnEspanol = p.translations?.spa?.common || p.name.common
+
+                return {
+                    names: { common: nombreEnEspanol },
+                    flag: { 
+                        url_svg: flagUrl,
+                        svg: flagUrl
                     }
                 }
-            } catch (e) {
-            }
-        }
-        todosLosPaises = Array.from(mapaPaises.values())
+            })
 
         if (todosLosPaises.length < 4) {
             mensaje.textContent = 'No se encontraron suficientes banderas válidas.'
             return
         }
-        reiniciarMazo()
 
+        reiniciarMazo()
         nuevaRonda()
+
     } catch (error) {
         console.error('Error al cargar países:', error)
-        mensaje.textContent = 'Error al conectar con la API.'
+        mensaje.textContent = 'Error al conectar con el servidor de banderas.'
     }
 }
 
